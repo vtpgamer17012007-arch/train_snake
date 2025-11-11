@@ -1,0 +1,16 @@
+# Kích thước màn hình
+GRID_SIZE = 20
+GRID_WIDTH = 30
+GRID_HEIGHT = 25
+
+SCREEN_WIDTH = GRID_SIZE * GRID_WIDTH
+SCREEN_HEIGHT = GRID_SIZE * GRID_HEIGHT
+
+# Màu sắc (giá trị RGB)
+COLOR_BACKGROUND = (0, 0, 0)
+COLOR_SNAKE = (0, 255, 0)
+COLOR_FOOD = (255, 0, 0)
+COLOR_GRID = (40, 40, 40)  # Màu đường lưới (tùy chọn)
+
+# Tốc độ game
+BASE_SPEED = 10
