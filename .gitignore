@@ -2,8 +2,12 @@
 myenv/
 venv/
 
-# Bỏ qua file save cá nhân của bạn
+# Bỏ qua file save DATA cá nhân (Dữ liệu JSON)
 save_games.json
+
+# Bỏ qua file CODE xử lý save (Theo yêu cầu của bạn)
+# Lưu ý: Người khác tải về sẽ thiếu file này và không chạy được game.
+snake/save_manager.py
 
 # Giữ các cài đặt riêng tư của bạn trên máy
 .vscode/
@@ -16,5 +20,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# IDK
+# Phiên bản Python local (pyenv)
 .python-version
