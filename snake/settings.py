@@ -1,5 +1,5 @@
 # =====================================================
-# CẤUE HÌNH GAME SNAKE
+# CẤU HÌNH GAME SNAKE
 # =====================================================
 
 # Kích thước màn hình
@@ -38,7 +38,7 @@ SELECTED_SNAKE_COLOR = "green"
 COLOR_SNAKE = SNAKE_COLORS[SELECTED_SNAKE_COLOR]
 
 # =====================================================
-# PHONG CẢH BUTTON MENU (Themes)
+# PHONG CẢNH BUTTON MENU (Themes)
 # =====================================================
 # Theme bao gồm: normal, hover, pressed, text
 BUTTON_THEMES = {
