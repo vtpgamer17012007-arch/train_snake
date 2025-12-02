@@ -37,8 +37,8 @@ class Intro:
         cx, cy = s.SCREEN_WIDTH // 2, s.SCREEN_HEIGHT // 2
         # Tính toán vị trí để căn giữa 3 nút nhỏ
         btn_w, btn_h = 90, 40
-        gap = 15
-        total_w = 3 * btn_w + 2 * gap
+        gap = 10
+        total_w = 4 * btn_w + 3 * gap
         start_x = cx - total_w // 2
         
         y_pos = cy - 120 # Vị trí Y của hàng nút độ khó
@@ -46,6 +46,7 @@ class Intro:
         self.btn_easy_rect = pygame.Rect(start_x, y_pos, btn_w, btn_h)
         self.btn_norm_rect = pygame.Rect(start_x + btn_w + gap, y_pos, btn_w, btn_h)
         self.btn_hard_rect = pygame.Rect(start_x + 2 * (btn_w + gap), y_pos, btn_w, btn_h)
+        self.btn_master_rect = pygame.Rect(start_x + 3 * (btn_w + gap), y_pos, btn_w, btn_h)
 
         self.input_rect = pygame.Rect(cx - 150, cy - 50, 300, 40)
         self.play_button_rect = pygame.Rect(cx - 150, cy + 20, 300, 50)
@@ -110,6 +111,8 @@ class Intro:
                         self.difficulty = s.DIFFICULTY_NORMAL
                     elif self.btn_hard_rect.collidepoint(event.pos):
                         self.difficulty = s.DIFFICULTY_HARD
+                    elif self.btn_master_rect.collidepoint(event.pos):
+                        self.difficulty = s.DIFFICULTY_MASTER
 
                     if self.nickname:
                         if self.play_button_rect.collidepoint(event.pos):
@@ -173,6 +176,7 @@ class Intro:
             self._draw_difficulty_btn(self.btn_easy_rect, "Easy", self.difficulty == s.DIFFICULTY_EASY)
             self._draw_difficulty_btn(self.btn_norm_rect, "Normal", self.difficulty == s.DIFFICULTY_NORMAL)
             self._draw_difficulty_btn(self.btn_hard_rect, "Hard", self.difficulty == s.DIFFICULTY_HARD)
+            self._draw_difficulty_btn(self.btn_master_rect, "Master", self.difficulty == s.DIFFICULTY_MASTER)
 
             self.screen.blit(self.img_input_bg, self.input_rect)
             txt = self.font_input.render(self.nickname, True, (255, 255, 255))
