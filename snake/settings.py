@@ -94,7 +94,7 @@ MIN_SPEED = 2  # Tốc độ tối thiểu
 # Độ khó
 DIFFICULTY_EASY = 5
 DIFFICULTY_NORMAL = 8
-DIFFICULTY_HARD = 12
+DIFFICULTY_HARD = 20
 
 # =====================================================
 # CẤU HÌNH LƯUTRÒ CHƠI

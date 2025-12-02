@@ -8,7 +8,7 @@ from snake.core.env_snake import SnakeEnv
 ASSETS_PATH = Path(__file__).parent.parent / "assets"
 
 class Board:
-    def __init__(self, screen, nickname, initial_state=None, save_name=None):
+    def __init__(self, screen, nickname, initial_state=None, save_name=None, difficulty=s.BASE_SPEED):
         self.screen = screen
         self.clock = pygame.time.Clock()
         self.running = True
@@ -36,7 +36,7 @@ class Board:
             self.env.set_state(initial_state)
             self.current_speed = initial_state["speed"]
         else:
-            self.current_speed = s.BASE_SPEED
+            self.current_speed = difficulty
 
         self.input_queue = []
         self.snake_sprites = {}
