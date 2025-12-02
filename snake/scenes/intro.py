@@ -25,6 +25,8 @@ class Intro:
         self.selected_mode = None
         self.selected_save = None
         
+        self.difficulty = s.DIFFICULTY_EASY
+
         self.SAVES_PER_PAGE = 5
         self.current_page = 0
 
@@ -33,10 +35,25 @@ class Intro:
 
     def _define_layout(self):
         cx, cy = s.SCREEN_WIDTH // 2, s.SCREEN_HEIGHT // 2
+        # Tính toán vị trí để căn giữa 3 nút nhỏ
+        btn_w, btn_h = 90, 40
+        gap = 10
+        total_w = 4 * btn_w + 3 * gap
+        start_x = cx - total_w // 2
+        
+        y_pos = cy - 120 # Vị trí Y của hàng nút độ khó
+        
+        self.btn_easy_rect = pygame.Rect(start_x, y_pos, btn_w, btn_h)
+        self.btn_norm_rect = pygame.Rect(start_x + btn_w + gap, y_pos, btn_w, btn_h)
+        self.btn_hard_rect = pygame.Rect(start_x + 2 * (btn_w + gap), y_pos, btn_w, btn_h)
+        self.btn_master_rect = pygame.Rect(start_x + 3 * (btn_w + gap), y_pos, btn_w, btn_h)
+
         self.input_rect = pygame.Rect(cx - 150, cy - 50, 300, 40)
         self.play_button_rect = pygame.Rect(cx - 150, cy + 20, 300, 50)
         self.ai_button_rect = pygame.Rect(cx - 150, cy + 90, 300, 50)
         self.load_button_rect = pygame.Rect(cx - 150, cy + 160, 300, 50)
+
+
         self.back_button_rect = pygame.Rect(20, s.SCREEN_HEIGHT - 60, 100, 40)
         self.next_page_rect = pygame.Rect(s.SCREEN_WIDTH - 60, cy - 25, 50, 50)
         self.prev_page_rect = pygame.Rect(10, cy - 25, 50, 50)
@@ -47,6 +64,9 @@ class Intro:
             green = pygame.image.load(ASSETS_PATH / "green_button00.png").convert_alpha()
             blue = pygame.image.load(ASSETS_PATH / "blue_button00.png").convert_alpha()
             red = pygame.image.load(ASSETS_PATH / "red_button00.png").convert_alpha()
+
+            self.img_diff_selected = pygame.transform.scale(green, (90, 40))
+            self.img_diff_unselected = pygame.transform.scale(blue, (90, 40))
 
             self.img_input_bg = pygame.transform.scale(panel, self.input_rect.size)
             self.img_play_btn = pygame.transform.scale(green, self.play_button_rect.size)
@@ -83,6 +103,17 @@ class Intro:
                 
                 if clicked:
                     self.input_active = self.input_rect.collidepoint(event.pos)
+
+                    #Xử lý click chọn độ khó
+                    if self.btn_easy_rect.collidepoint(event.pos):
+                        self.difficulty = s.DIFFICULTY_EASY
+                    elif self.btn_norm_rect.collidepoint(event.pos):
+                        self.difficulty = s.DIFFICULTY_NORMAL
+                    elif self.btn_hard_rect.collidepoint(event.pos):
+                        self.difficulty = s.DIFFICULTY_HARD
+                    elif self.btn_master_rect.collidepoint(event.pos):
+                        self.difficulty = s.DIFFICULTY_MASTER
+
                     if self.nickname:
                         if self.play_button_rect.collidepoint(event.pos):
                             self.selected_mode = "PLAYER"; self.running = False
@@ -118,12 +149,35 @@ class Intro:
         else:
             self.screen.blit(img, rect)
 
+    def _draw_difficulty_btn(self, rect, text, is_selected):
+            img = self.img_diff_selected if is_selected else self.img_diff_unselected
+            # Hiệu ứng hover nhẹ
+            if rect.collidepoint(pygame.mouse.get_pos()):
+                # Vẽ ảnh phóng to tí xíu nếu thích, hoặc vẽ đè sáng lên
+                pass 
+            
+            self.screen.blit(img, rect)
+            
+            # Màu chữ: Nếu chọn thì màu Trắng, chưa chọn thì màu Xám
+            color = (255, 255, 255) if is_selected else (150, 150, 150)
+            # Font nhỏ hơn chút cho nút nhỏ
+            font = pygame.font.SysFont('Arial', 20, bold=is_selected)
+            txt_surf = font.render(text, True, color)
+            self.screen.blit(txt_surf, txt_surf.get_rect(center=rect.center))
+
+
     def _draw_elements(self):
         self.screen.fill(s.COLOR_BACKGROUND)
         title = self.font_title.render("Snake Game", True, (255, 255, 255))
         self.screen.blit(title, title.get_rect(center=(s.SCREEN_WIDTH//2, 80)))
 
         if not self.showing_load_menu:
+
+            self._draw_difficulty_btn(self.btn_easy_rect, "Easy", self.difficulty == s.DIFFICULTY_EASY)
+            self._draw_difficulty_btn(self.btn_norm_rect, "Normal", self.difficulty == s.DIFFICULTY_NORMAL)
+            self._draw_difficulty_btn(self.btn_hard_rect, "Hard", self.difficulty == s.DIFFICULTY_HARD)
+            self._draw_difficulty_btn(self.btn_master_rect, "Master", self.difficulty == s.DIFFICULTY_MASTER)
+
             self.screen.blit(self.img_input_bg, self.input_rect)
             txt = self.font_input.render(self.nickname, True, (255, 255, 255))
             self.screen.blit(txt, (self.input_rect.x+15, self.input_rect.y+5))
@@ -171,4 +225,4 @@ class Intro:
             self._handle_input()
             self._draw_elements()
             self.clock.tick(30)
-        return self.selected_mode, self.nickname, self.selected_save
+        return self.selected_mode, self.nickname, self.selected_save, self.difficulty

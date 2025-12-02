@@ -19,11 +19,11 @@ class SnakeApp:
         while True:
             if self.current_scene_name == "INTRO":
                 self.current_scene_obj = Intro(self.screen)
-                mode, nickname, save_name = self.current_scene_obj.run()
+                mode, nickname, save_name, difficulty = self.current_scene_obj.run()
                 if nickname: self.nickname = nickname
 
                 if mode == "PLAYER":
-                    self.current_scene_obj = Board(self.screen, self.nickname)
+                    self.current_scene_obj = Board(self.screen, self.nickname, difficulty=difficulty)
                     self.current_scene_name = "BOARD"
                 elif mode == "LOAD":
                     state = save_manager.load_game(save_name)
