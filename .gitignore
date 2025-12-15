@@ -1,0 +1,24 @@
+# Bỏ qua môi trường ảo
+myenv/
+venv/
+
+# Bỏ qua file save DATA cá nhân (Dữ liệu JSON)
+save_games.json
+
+# Bỏ qua file CODE xử lý save (Theo yêu cầu của bạn)
+# Lưu ý: Người khác tải về sẽ thiếu file này và không chạy được game.
+snake/save_manager.py
+
+# Giữ các cài đặt riêng tư của bạn trên máy
+.vscode/
+
+# Python tự tạo ra các file này khi chạy
+__pycache__/
+*.pyc
+
+# File hệ thống của OS
+.DS_Store
+Thumbs.db
+
+# Phiên bản Python local (pyenv)
+.python-version
