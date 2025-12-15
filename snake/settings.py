@@ -10,6 +10,21 @@ GRID_HEIGHT = 25  # Số ô dọc
 SCREEN_WIDTH = 1280 # 600 pixel
 SCREEN_HEIGHT = 720  # 500 pixel
 
+PLAY_AREA_LEFT = 90    
+PLAY_AREA_TOP = 150     
+PLAY_AREA_WIDTH = 1080  
+PLAY_AREA_HEIGHT = 500
+
+START_COL = PLAY_AREA_LEFT // GRID_SIZE   # Ví dụ: 100 // 20 = 5 (Cột thứ 5)
+START_ROW = PLAY_AREA_TOP // GRID_SIZE    # Ví dụ: 150 // 20 = 7 (Hàng thứ 7)
+
+# Tính số lượng ô trong vùng chơi
+GRID_WIDTH = PLAY_AREA_WIDTH // GRID_SIZE
+GRID_HEIGHT = PLAY_AREA_HEIGHT // GRID_SIZE
+
+# Tính giới hạn dưới và phải (để check va chạm)
+END_COL = START_COL + GRID_WIDTH
+END_ROW = START_ROW + GRID_HEIGHT
 # =====================================================
 # CẤU HÌNH MÀU SẮC (giá trị RGB)
 # =====================================================
@@ -115,3 +130,24 @@ EPSILON_MIN = 0.01
 EPSILON_DECAY = 0.995
 BATCH_SIZE = 32
 MEMORY_SIZE = 10000
+
+# =====================================================
+# CẤU HÌNH 2 PLAYER
+# =====================================================
+import pygame
+
+# Player 1: Mũi tên (Arrows) - Rắn Xanh (Ăn Táo)
+P2_CONTROLS = {
+    "UP": pygame.K_UP,
+    "DOWN": pygame.K_DOWN,
+    "LEFT": pygame.K_LEFT,
+    "RIGHT": pygame.K_RIGHT
+}
+
+# Player 2: WASD - Rắn Vàng/Nâu (Ăn Shit)
+P1_CONTROLS = {
+    "UP": pygame.K_w,
+    "DOWN": pygame.K_s,
+    "LEFT": pygame.K_a,
+    "RIGHT": pygame.K_d
+}

@@ -22,7 +22,7 @@ class Rules:
         self.selected_mode = None
 
         self.font_input = pygame.font.SysFont('Arial', 30)
-
+        self.return_state = "QUIT"
         self._define_layout()
         self._load_assets()
 
@@ -54,22 +54,26 @@ class Rules:
             
             clicked = (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1)
             
-
-            if self.mode == "PLAY_TOGETHER":
-                if clicked:
-                    if self.next_button_rect.collidepoint(event.pos):
-                        self.running = False
-            elif self.mode == "BATTLE_ROYALE":
-                if clicked:
-                    if self.player_info_next_button_rect.collidepoint(event.pos):
-                        self.running = False
-            elif self.mode == "SOLO_LEVELING":
-                if clicked:
-                    if self.next_button_rect.collidepoint(event.pos):
-                        self.running = False
             if clicked:
+                # Xử lý nút Back (Quay lại)
                 if self.back_button_rect.collidepoint(event.pos):
-                    self.selected_mode = "QUIT"
+                    self.return_state = "QUIT" # Quan trọng: Phải set là QUIT
+                    self.running = False
+
+                # Xử lý nút Next (Vào game)
+                # Lưu ý: Cả 3 chế độ đều dùng chung self.next_button_rect được định nghĩa ở _define_layout
+                is_next_clicked = False
+                
+                if self.mode == "SOLO_LEVELING" and self.next_button_rect.collidepoint(event.pos):
+                    is_next_clicked = True
+                elif self.mode == "PLAY_TOGETHER" and self.next_button_rect.collidepoint(event.pos):
+                    is_next_clicked = True
+                elif self.mode == "BATTLE_ROYALE" and self.next_button_rect.collidepoint(event.pos):
+                    # Đã sửa tên biến từ player_info_next_button_rect thành next_button_rect
+                    is_next_clicked = True
+                
+                if is_next_clicked:
+                    self.return_state = "PLAY" # Quan trọng: Phải set là PLAY để app.py biết mà vào game
                     self.running = False
                 
 
@@ -99,4 +103,4 @@ class Rules:
             self._draw_elements()
             pygame.display.flip()
             self.clock.tick(s.FPS)
-        return
+        return self.return_state
