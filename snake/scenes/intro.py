@@ -26,6 +26,7 @@ class Intro:
         self.selected_save = None
         
         self.difficulty = s.DIFFICULTY_EASY
+        
 
         self.SAVES_PER_PAGE = 5
         self.current_page = 0
@@ -33,45 +34,26 @@ class Intro:
         self._define_layout()
         self._load_assets()
 
-    def _define_layout(self):
-        cx, cy = s.SCREEN_WIDTH // 2, s.SCREEN_HEIGHT // 2
-        # Tính toán vị trí để căn giữa 3 nút nhỏ
-        btn_w, btn_h = 90, 40
-        gap = 10
-        total_w = 4 * btn_w + 3 * gap
-        start_x = cx - total_w // 2
-        
-        y_pos = cy - 120 # Vị trí Y của hàng nút độ khó
-        
-        self.btn_easy_rect = pygame.Rect(start_x, y_pos, btn_w, btn_h)
-        self.btn_norm_rect = pygame.Rect(start_x + btn_w + gap, y_pos, btn_w, btn_h)
-        self.btn_hard_rect = pygame.Rect(start_x + 2 * (btn_w + gap), y_pos, btn_w, btn_h)
-        self.btn_master_rect = pygame.Rect(start_x + 3 * (btn_w + gap), y_pos, btn_w, btn_h)
-
-        self.input_rect = pygame.Rect(cx - 150, cy - 50, 300, 40)
-        self.play_button_rect = pygame.Rect(cx - 150, cy + 20, 300, 50)
-        self.ai_button_rect = pygame.Rect(cx - 150, cy + 90, 300, 50)
-        self.load_button_rect = pygame.Rect(cx - 150, cy + 160, 300, 50)
-
-
-        self.back_button_rect = pygame.Rect(20, s.SCREEN_HEIGHT - 60, 100, 40)
-        self.next_page_rect = pygame.Rect(s.SCREEN_WIDTH - 60, cy - 25, 50, 50)
-        self.prev_page_rect = pygame.Rect(10, cy - 25, 50, 50)
-
     def _load_assets(self):
         try:
+            self.img_background = pygame.image.load(ASSETS_PATH / "intro_background.png").convert_alpha()
+            self.img_play_button = pygame.image.load(ASSETS_PATH / "play_button.png").convert_alpha()
+            self.img_continue_button = pygame.image.load(ASSETS_PATH / "continue_button.png").convert_alpha()
+            self.img_ai_button = pygame.image.load(ASSETS_PATH / "ai_button.png").convert_alpha()
+            self.img_credit_button = pygame.image.load(ASSETS_PATH / "credit_button.png").convert_alpha()
+            
+
             panel = pygame.image.load(ASSETS_PATH / "grey_panel.png").convert_alpha()
             green = pygame.image.load(ASSETS_PATH / "green_button00.png").convert_alpha()
             blue = pygame.image.load(ASSETS_PATH / "blue_button00.png").convert_alpha()
             red = pygame.image.load(ASSETS_PATH / "red_button00.png").convert_alpha()
 
+            
+            
+
             self.img_diff_selected = pygame.transform.scale(green, (90, 40))
             self.img_diff_unselected = pygame.transform.scale(blue, (90, 40))
-
             self.img_input_bg = pygame.transform.scale(panel, self.input_rect.size)
-            self.img_play_btn = pygame.transform.scale(green, self.play_button_rect.size)
-            self.img_ai_btn = pygame.transform.scale(green, self.ai_button_rect.size)
-            self.img_load_btn = pygame.transform.scale(blue, self.load_button_rect.size)
             self.img_back_btn = pygame.transform.scale(red, self.back_button_rect.size)
             self.img_save_slot = pygame.transform.scale(panel, (400, 50))
             self.img_next_btn = pygame.transform.scale(blue, self.next_page_rect.size)
@@ -79,6 +61,28 @@ class Intro:
         except FileNotFoundError:
             print("Lỗi load ảnh Intro")
             sys.exit()
+
+    def _define_layout(self):
+        cx, cy = s.SCREEN_WIDTH // 2, s.SCREEN_HEIGHT // 2
+        # Tính toán vị trí để căn giữa 3 nút nhỏ
+        
+
+        self.input_rect = pygame.Rect(cx - 150, cy - 50, 300, 40)
+        
+        self.play_button_rect = pygame.Rect(157, 319, 277, 70)
+        self.continue_button_rect = pygame.Rect(224, 406, 277, 70)
+        self.ai_button_rect = pygame.Rect(157, 492, 277, 70)
+        self.credit_button_rect = pygame.Rect(224, 578, 277, 70)
+
+
+        
+        #self.ai_button_rect = pygame.Rect(cx - 150, cy + 90, 300, 50)
+        self.load_button_rect = pygame.Rect(cx - 150, cy + 160, 300, 50)
+
+
+        self.back_button_rect = pygame.Rect(20, s.SCREEN_HEIGHT - 60, 100, 40)
+        self.next_page_rect = pygame.Rect(s.SCREEN_WIDTH - 60, cy - 25, 50, 50)
+        self.prev_page_rect = pygame.Rect(10, cy - 25, 50, 50)      
 
     def _build_current_page(self):
         self.save_rects = []
@@ -96,30 +100,16 @@ class Intro:
             clicked = (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1)
 
             if not self.showing_load_menu:
-                if event.type == pygame.KEYDOWN:
-                    if self.input_active:
-                        if event.key == pygame.K_BACKSPACE: self.nickname = self.nickname[:-1]
-                        elif len(self.nickname) < 15: self.nickname += event.unicode
+                
                 
                 if clicked:
                     self.input_active = self.input_rect.collidepoint(event.pos)
-
-                    #Xử lý click chọn độ khó
-                    if self.btn_easy_rect.collidepoint(event.pos):
-                        self.difficulty = s.DIFFICULTY_EASY
-                    elif self.btn_norm_rect.collidepoint(event.pos):
-                        self.difficulty = s.DIFFICULTY_NORMAL
-                    elif self.btn_hard_rect.collidepoint(event.pos):
-                        self.difficulty = s.DIFFICULTY_HARD
-                    elif self.btn_master_rect.collidepoint(event.pos):
-                        self.difficulty = s.DIFFICULTY_MASTER
-
-                    if self.nickname:
-                        if self.play_button_rect.collidepoint(event.pos):
-                            self.selected_mode = "PLAYER"; self.running = False
-                        if self.ai_button_rect.collidepoint(event.pos):
+                    
+                    if self.play_button_rect.collidepoint(event.pos):
+                            self.selected_mode = "PLAY"; self.running = False
+                    if self.ai_button_rect.collidepoint(event.pos):
                             self.selected_mode = "AI"; self.running = False
-                    if self.load_button_rect.collidepoint(event.pos):
+                    if self.continue_button_rect.collidepoint(event.pos):
                         self.showing_load_menu = True
                         self.save_list = save_manager.get_save_list()
                         self.current_page = 0
@@ -139,90 +129,62 @@ class Intro:
                             self.selected_mode = "LOAD"
                             idx = self.current_page * self.SAVES_PER_PAGE + i
                             self.selected_save = self.save_list[idx]
-                            self.running = False
+                        self.running = False
 
-    def _draw_btn(self, img, rect):
-        if rect.collidepoint(pygame.mouse.get_pos()):
-            w, h = int(rect.width * 1.05), int(rect.height * 1.05)
-            scaled = pygame.transform.scale(img, (w, h))
-            self.screen.blit(scaled, scaled.get_rect(center=rect.center))
-        else:
-            self.screen.blit(img, rect)
-
-    def _draw_difficulty_btn(self, rect, text, is_selected):
-            img = self.img_diff_selected if is_selected else self.img_diff_unselected
-            # Hiệu ứng hover nhẹ
+    def HoverEffect(self, img, rect):
             if rect.collidepoint(pygame.mouse.get_pos()):
-                # Vẽ ảnh phóng to tí xíu nếu thích, hoặc vẽ đè sáng lên
-                pass 
-            
-            self.screen.blit(img, rect)
-            
-            # Màu chữ: Nếu chọn thì màu Trắng, chưa chọn thì màu Xám
-            color = (255, 255, 255) if is_selected else (150, 150, 150)
-            # Font nhỏ hơn chút cho nút nhỏ
-            font = pygame.font.SysFont('Arial', 20, bold=is_selected)
-            txt_surf = font.render(text, True, color)
-            self.screen.blit(txt_surf, txt_surf.get_rect(center=rect.center))
+                w, h = int(rect.width * 1.05), int(rect.height * 1.05)
+                scaled = pygame.transform.scale(img, (w, h))
+                self.screen.blit(scaled, scaled.get_rect(center=rect.center))
+            else:
+                self.screen.blit(img, rect)
 
+    
+
+    def Hover(self, img, rect):
+        if rect.collidepoint(pygame.mouse.get_pos()):
+            self.screen.blit(img,(0,0))
 
     def _draw_elements(self):
-        self.screen.fill(s.COLOR_BACKGROUND)
-        title = self.font_title.render("Snake Game", True, (255, 255, 255))
-        self.screen.blit(title, title.get_rect(center=(s.SCREEN_WIDTH//2, 80)))
+        self.screen.blit(self.img_background, (0, 0))
+       
 
         if not self.showing_load_menu:
 
-            self._draw_difficulty_btn(self.btn_easy_rect, "Easy", self.difficulty == s.DIFFICULTY_EASY)
-            self._draw_difficulty_btn(self.btn_norm_rect, "Normal", self.difficulty == s.DIFFICULTY_NORMAL)
-            self._draw_difficulty_btn(self.btn_hard_rect, "Hard", self.difficulty == s.DIFFICULTY_HARD)
-            self._draw_difficulty_btn(self.btn_master_rect, "Master", self.difficulty == s.DIFFICULTY_MASTER)
+            self.Hover(self.img_play_button, self.play_button_rect)
+            self.Hover(self.img_continue_button, self.continue_button_rect)
+            self.Hover(self.img_ai_button, self.ai_button_rect) 
+            self.Hover(self.img_credit_button, self.credit_button_rect)
+            
 
-            self.screen.blit(self.img_input_bg, self.input_rect)
-            txt = self.font_input.render(self.nickname, True, (255, 255, 255))
-            self.screen.blit(txt, (self.input_rect.x+15, self.input_rect.y+5))
-            if not self.nickname and not self.input_active:
-                ph = self.font_input.render("Enter Nickname...", True, (150, 150, 150))
-                self.screen.blit(ph, (self.input_rect.x+15, self.input_rect.y+5))
-
-            self._draw_btn(self.img_play_btn, self.play_button_rect)
-            t = self.font_menu.render("Player Play", True, (255, 255, 255))
-            self.screen.blit(t, t.get_rect(center=self.play_button_rect.center))
-
-            self._draw_btn(self.img_ai_btn, self.ai_button_rect)
-            t = self.font_menu.render("AI Play", True, (255, 255, 255))
-            self.screen.blit(t, t.get_rect(center=self.ai_button_rect.center))
-
-            self._draw_btn(self.img_load_btn, self.load_button_rect)
-            t = self.font_menu.render("Load Game", True, (255, 255, 255))
-            self.screen.blit(t, t.get_rect(center=self.load_button_rect.center))
         else:
             start = self.current_page * self.SAVES_PER_PAGE
             for i, rect in enumerate(self.save_rects):
-                self._draw_btn(self.img_save_slot, rect)
+                self.HoverEffect(self.img_save_slot, rect)
                 name = self.save_list[start+i]
                 t = self.font_input.render(name, True, (255, 255, 255))
                 self.screen.blit(t, t.get_rect(center=rect.center))
 
-            self._draw_btn(self.img_back_btn, self.back_button_rect)
+            self.HoverEffect(self.img_back_btn, self.back_button_rect)
             t = self.font_button.render("Back", True, (255, 255, 255))
             self.screen.blit(t, t.get_rect(center=self.back_button_rect.center))
             
             total = (len(self.save_list) + self.SAVES_PER_PAGE - 1) // self.SAVES_PER_PAGE
             if self.current_page < total - 1:
-                self._draw_btn(self.img_next_btn, self.next_page_rect)
+                self.HoverEffect(self.img_next_btn, self.next_page_rect)
                 t = self.font_menu.render(">", True, (255, 255, 255))
                 self.screen.blit(t, t.get_rect(center=self.next_page_rect.center))
             if self.current_page > 0:
-                self._draw_btn(self.img_prev_btn, self.prev_page_rect)
+                self.HoverEffect(self.img_prev_btn, self.prev_page_rect)
                 t = self.font_menu.render("<", True, (255, 255, 255))
                 self.screen.blit(t, t.get_rect(center=self.prev_page_rect.center))
 
-        pygame.display.update()
+        
 
     def run(self):
         while self.running:
             self._handle_input()
             self._draw_elements()
-            self.clock.tick(30)
-        return self.selected_mode, self.nickname, self.selected_save, self.difficulty
+            pygame.display.flip()
+            self.clock.tick(s.FPS)
+        return self.selected_mode, self.selected_save

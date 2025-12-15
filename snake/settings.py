@@ -7,8 +7,8 @@ GRID_SIZE = 20  # Kích thước một ô lưới (pixel)
 GRID_WIDTH = 30  # Số ô ngang
 GRID_HEIGHT = 25  # Số ô dọc
 
-SCREEN_WIDTH = GRID_SIZE * GRID_WIDTH  # 600 pixel
-SCREEN_HEIGHT = GRID_SIZE * GRID_HEIGHT  # 500 pixel
+SCREEN_WIDTH = 1280 # 600 pixel
+SCREEN_HEIGHT = 720  # 500 pixel
 
 # =====================================================
 # CẤU HÌNH MÀU SẮC (giá trị RGB)
@@ -91,11 +91,12 @@ BASE_SPEED = 8  # Tốc độ mặc định (8 frame mỗi bước rắn)
 MAX_SPEED = 20  # Tốc độ tối đa
 MIN_SPEED = 2  # Tốc độ tối thiểu
 
+FPS = 60  # Khung hình trên giây
 # Độ khó
-DIFFICULTY_EASY = 5
-DIFFICULTY_NORMAL = 8
+DIFFICULTY_EASY = 8
+DIFFICULTY_NORMAL = 12
 DIFFICULTY_HARD = 18
-DIFFICULTY_MASTER = 25
+
 
 # =====================================================
 # CẤU HÌNH LƯUTRÒ CHƠI
