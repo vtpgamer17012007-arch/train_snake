@@ -1,4 +1,5 @@
 import random
+import pygame
 from snake import settings as s
 
 class SnakeEnv:
@@ -6,7 +7,10 @@ class SnakeEnv:
         self.reset()
 
     def reset(self):
-        self.snake_pos = [(s.GRID_WIDTH // 2, s.GRID_HEIGHT // 2)]
+        start_x = s.START_COL + (s.GRID_WIDTH // 2)
+        start_y = s.START_ROW + (s.GRID_HEIGHT // 2)
+        
+        self.snake_pos = [(start_x, start_y)]
         self.direction = (0, -1)
         self.food_pos = None
         self.poops = []
@@ -19,8 +23,8 @@ class SnakeEnv:
     def _spawn_food(self):
         while True:
             self.food_pos = (
-                random.randint(0, s.GRID_WIDTH - 1),
-                random.randint(0, s.GRID_HEIGHT - 1)
+                random.randint(s.START_COL, s.END_COL - 1),
+                random.randint(s.START_ROW, s.END_ROW - 1)
             )
             if self.food_pos not in self.snake_pos:
                 break
@@ -28,8 +32,8 @@ class SnakeEnv:
     def _spawn_poop(self):
         while True:
             pos = (
-                random.randint(0, s.GRID_WIDTH - 1),
-                random.randint(0, s.GRID_HEIGHT - 1)
+                random.randint(s.START_COL, s.END_COL - 1),
+                random.randint(s.START_ROW, s.END_ROW - 1)
             )
             existing_poops = [p['pos'] for p in self.poops]
             if (pos not in self.snake_pos and 
@@ -48,8 +52,8 @@ class SnakeEnv:
         new_head = (head_x + dir_x, head_y + dir_y)
 
         if (new_head in self.snake_pos or
-            new_head[0] < 0 or new_head[0] >= s.GRID_WIDTH or
-            new_head[1] < 0 or new_head[1] >= s.GRID_HEIGHT):
+            new_head[0] < s.START_COL or new_head[0] >= s.END_COL or
+            new_head[1] < s.START_ROW or new_head[1] >= s.END_ROW):
             self.game_over = True
             return self.get_state(), -10, True, {}
 

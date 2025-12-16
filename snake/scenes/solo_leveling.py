@@ -39,6 +39,14 @@ class SoloLeveling:
         self._load_snake_sprites()
         self._load_ui_assets()
         
+        try:
+            bg_path = Path(__file__).parent.parent / "assets/play_together_board.png"
+            self.bg_image = pygame.image.load(bg_path)
+            self.bg_image = pygame.transform.scale(self.bg_image, (s.SCREEN_WIDTH, s.SCREEN_HEIGHT))
+        except FileNotFoundError:
+            print("Thiếu ảnh background!")
+            self.bg_image = None
+
         cx, cy = s.SCREEN_WIDTH // 2, s.SCREEN_HEIGHT // 2
         self.play_again_rect = pygame.Rect(cx - 100, cy + 20, 200, 50)
         self.menu_rect = pygame.Rect(cx - 100, cy + 90, 200, 50)
@@ -148,10 +156,13 @@ class SoloLeveling:
                 self.loaded_and_died_instantly = True
 
     def _draw_elements(self):
-        self.screen.fill(s.COLOR_BACKGROUND)
+        if self.bg_image:
+            self.screen.blit(self.bg_image, (0, 0))
+        else:
+            self.screen.fill(s.COLOR_BACKGROUND)
+
         snake_pos = self.env.snake_pos
         direction = self.env.direction
-
         for index, pos in enumerate(snake_pos):
             rect = pygame.Rect(pos[0] * s.GRID_SIZE, pos[1] * s.GRID_SIZE, s.GRID_SIZE, s.GRID_SIZE)
             sprite = None
@@ -214,7 +225,7 @@ class SoloLeveling:
                              pygame.Rect(pp[0]*s.GRID_SIZE, pp[1]*s.GRID_SIZE, s.GRID_SIZE, s.GRID_SIZE))
 
         score_txt = self.font.render(f"{self.nickname} Score: {self.env.score}", True, (255, 255, 255))
-        self.screen.blit(score_txt, (5, 5))
+        self.screen.blit(score_txt, (80, 50))
 
     def _draw_game_over_ui(self):
         self._draw_overlay()

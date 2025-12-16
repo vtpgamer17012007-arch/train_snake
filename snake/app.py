@@ -8,6 +8,7 @@ from snake.scenes.select_info import SelectInfo
 from snake.scenes.play_together import PlayTogether 
 from snake.scenes.rules import Rules
 from snake import save_manager
+from snake.scenes.board_2p import Board2P
 
 class SnakeApp:
     def __init__(self):
@@ -21,7 +22,7 @@ class SnakeApp:
         self.nickname_player2 = ""
         self.selected_mode = None # <--- THÊM BIẾN LƯU CHẾ ĐỘ CHƠI
         self.rules = None
-        self.difficulty = None
+        self.difficulty = s.DIFFICULTY_NORMAL
 
     def run(self):
         while True:
@@ -35,7 +36,7 @@ class SnakeApp:
                 elif mode == "LOAD":
                     state = save_manager.load_game(save_name)
                     if state:
-                        self.current_scene_obj = SoloLeveling(self.screen, state["nickname"], state, save_name)
+                        self.current_scene_obj = SoloLeveling(self.screen, state["nickname"], state["speed"], state, save_name)
                         self.current_scene_name = "SOLO_LEVELING"
                     else:
                         self.current_scene_name = "INTRO"
@@ -64,35 +65,32 @@ class SnakeApp:
                 # Khởi tạo Setup Scene và truyền chế độ đã chọn vào
                 print(self.selected_mode)
                 self.current_scene_obj = SelectInfo(self.screen, self.selected_mode)
-                self.selcected_mode, self.nickname_player1, self.nickname_player2, self.difficulty = self.current_scene_obj.run() # Lấy danh sách thông tin người chơi
+                mode_status, self.nickname_player1, self.nickname_player2, diff_str = self.current_scene_obj.run() # Lấy danh sách thông tin người chơi
                     # Chuyển đến Mode với thông tin người chơi đã nhập
                     
-                if self.selected_mode in ["SOLO_LEVELING", "PLAY_TOGETHER", "BATTLE_ROYALE"]:
-                    self.current_scene_name = "RULES"
-                    print("ko")
-                elif self.selected_mode == "QUIT":
-                    self.current_scene_name = "PLAY_MODE" # Quay lại PlayMode
+                if mode_status == "QUIT":
+                     self.current_scene_name = "PLAY_MODE"
                 else:
-                    self.current_scene_name = "INTRO" # Quay lại nếu hủy
-            
+                    # Nếu diff_str là "DIFFICULTY_HARD", nó sẽ lấy giá trị 18 từ settings
+                    if hasattr(s, diff_str):
+                        self.difficulty = getattr(s, diff_str)
+                    else:
+                        self.difficulty = s.DIFFICULTY_NORMAL
+                    self.current_scene_name = "RULES"
             # 4. RULES: Scene Hiển thị Luật Chơi
             elif self.current_scene_name == "RULES":
                 self.current_scene_obj = Rules(self.screen, self.selected_mode)
-                self.current_scene_obj.run()
-                print (self.selected_mode)
-                if self.selected_mode in ["SOLO_LEVELING", "PLAY_TOGETHER", "BATTLE_ROYALE"]:
+                rules_action = self.current_scene_obj.run()
+                if rules_action == "QUIT":
+                    self.current_scene_name = "SELECT_INFO" # Quay lại màn hình nhập tên
+                else:
+                    # Bấm Next -> Vào game
                     if self.selected_mode == "SOLO_LEVELING":
                         self.current_scene_name = "SOLO_LEVELING"
                     elif self.selected_mode == "PLAY_TOGETHER":
                         self.current_scene_name = "PLAY_TOGETHER"
                     elif self.selected_mode == "BATTLE_ROYALE":
                         self.current_scene_name = "BATTLE_ROYALE"
-                elif self.selected_mode == "QUIT":
-                    print("Quay lại Select Info")
-                    self.current_scene_name = "SELECT_INFO" # Quay lại Select Info
-                else:
-                    self.current_scene_name = "INTRO" # Quay lại nếu hủy
-                
 
             # 5. Scene Chơi Game Chính
 
@@ -101,11 +99,11 @@ class SnakeApp:
                 next_scene = self.current_scene_obj.run() 
                 self.current_scene_name = next_scene
             elif self.current_scene_name == "PLAY_TOGETHER":
-                self.current_scene_obj = PlayTogether(self.screen, self.nickname_player1, self.nickname_player2)
+                self.current_scene_obj = Board2P(self.screen, self.nickname_player1, self.nickname_player2)
                 next_scene = self.current_scene_obj.run()
                 self.current_scene_name = next_scene
             elif self.current_scene_name == "BATTLE_ROYALE":
-                self.current_scene_obj = PlayTogether(self.screen, self.nickname_player1, self.nickname_player2) # Tạm thời dùng PlayTogether cho Battle Royale
+                self.current_scene_obj = Board2P(self.screen, self.nickname_player1, self.nickname_player2) # Tạm thời dùng PlayTogether cho Battle Royale
                 next_scene = self.current_scene_obj.run()
                 self.current_scene_name = next_scene
             
