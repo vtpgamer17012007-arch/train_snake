@@ -156,11 +156,9 @@ class SoloLeveling:
                 self.loaded_and_died_instantly = True
 
     def _draw_elements(self):
-        if self.bg_image:
-            self.screen.blit(self.bg_image, (0, 0))
-        else:
-            self.screen.fill(s.COLOR_BACKGROUND)
-
+        
+        self.screen.blit(self.bg_image, (0, 0))
+        
         snake_pos = self.env.snake_pos
         direction = self.env.direction
         for index, pos in enumerate(snake_pos):
