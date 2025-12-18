@@ -123,11 +123,12 @@ def train():
 
 def save_stats(n_games, record):
     """Lưu số trận và kỷ lục vào file JSON."""
+    "/content/drive/MyDrive/SnakeAI/stats.json"
     stats = {
         "n_games": n_games,
         "record": record
     }
-    with open("stats.json", "w") as f:
+    with open(path, "w") as f:
         json.dump(stats, f)
     # print("--> Đã lưu tiến trình vào stats.json")
 
