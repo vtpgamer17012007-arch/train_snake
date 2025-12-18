@@ -121,23 +121,30 @@ def train():
 
             print(f'Trận: {agent.n_games} | Điểm: {final_score} | Kỷ lục: {record} | Epsilon: {agent.epsilon:.2f}')
             
-path = "/content/drive/MyDrive/SnakeAI/stats.json"
+# Đường dẫn vĩnh viễn trên Drive
+STAT_PATH = "/content/drive/MyDrive/SnakeAI/stats.json"
+
 def save_stats(n_games, record):
-    """Lưu số trận và kỷ lục vào file JSON."""
+    """Lưu số trận và kỷ lục vào file JSON trên Drive."""
+    # Đảm bảo thư mục tồn tại trước khi lưu
+    os.makedirs(os.path.dirname(STAT_PATH), exist_ok=True)
+    
     stats = {
         "n_games": n_games,
         "record": record
     }
-    with open(path, "w") as f:
+    with open(STAT_PATH, "w") as f: # Dùng STAT_PATH
         json.dump(stats, f)
-    # print("--> Đã lưu tiến trình vào stats.json")
+    print(f"--> Đã lưu tiến trình vào Drive: {stats}")
 
 def load_stats():
-    """Tải số trận và kỷ lục từ file JSON nếu tồn tại."""
-    if os.path.exists("stats.json"):
-        with open("stats.json", "r") as f:
+    """Tải số trận và kỷ lục từ file JSON trên Drive nếu tồn tại."""
+    if os.path.exists(STAT_PATH): # PHẢI đổi từ "stats.json" thành STAT_PATH
+        with open(STAT_PATH, "r") as f: # PHẢI đổi từ "stats.json" thành STAT_PATH
             stats = json.load(f)
             return stats.get("n_games", 0), stats.get("record", 0)
-    return 0, 0 # Trả về mặc định nếu file chưa tồn tại
+    
+    print("--> Không tìm thấy file stats trên Drive, bắt đầu mới.")
+    return 0, 0
 if __name__ == '__main__':
     train()
