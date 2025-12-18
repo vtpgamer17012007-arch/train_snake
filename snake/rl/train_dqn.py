@@ -120,10 +120,10 @@ def train():
             # plot(plot_scores, plot_mean_scores) # Vẽ đồ thị tiến trình huấn luyện
 
             print(f'Trận: {agent.n_games} | Điểm: {final_score} | Kỷ lục: {record} | Epsilon: {agent.epsilon:.2f}')
-
+            
+path = "/content/drive/MyDrive/SnakeAI/stats.json"
 def save_stats(n_games, record):
     """Lưu số trận và kỷ lục vào file JSON."""
-    path = "/content/drive/MyDrive/SnakeAI/stats.json"
     stats = {
         "n_games": n_games,
         "record": record
