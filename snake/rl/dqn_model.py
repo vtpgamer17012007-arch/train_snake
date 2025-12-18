@@ -11,8 +11,8 @@ class Linear_QNet(nn.Module):
         # Lớp tuyến tính 2: Từ 256 node ẩn xuống 4 đầu ra (hành động)
         self.linear2 = nn.Linear(hidden_size, output_size)
 
-    def load(self, file_name='best_model.pth'):
-        full_path = os.path.join('./models', file_name)
+    def load(self):
+        full_path = '/content/drive/MyDrive/SnakeAI/models/best_model' 
         if os.path.exists(full_path):
             self.load_state_dict(torch.load(full_path))
             self.eval() 
@@ -26,7 +26,7 @@ class Linear_QNet(nn.Module):
         x = self.linear2(x)
         return x
 
-    def save(self, episode=None, file_name='model.pth'):
+    def save(self, episode=None, file_name='best_model.pth'):
         model_folder_path = '/content/drive/MyDrive/SnakeAI/models' 
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
