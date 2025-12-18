@@ -17,9 +17,9 @@ class DQNAgent:
 
     def get_action(self, state):
         # Chiến thuật Epsilon-Greedy: Răng càng chơi nhiều càng bớt đi lung tung
-        self.epsilon = max(10, 500 - self.n_games)
+        self.epsilon = max(5, 300 - self.n_games)
         final_move = 0
-        if random.randint(0, 500) < self.epsilon:
+        if random.randint(0, 300) < self.epsilon:
             final_move = random.randint(0, 3)
         else:
             state_tensor = torch.tensor(state, dtype=torch.float)
