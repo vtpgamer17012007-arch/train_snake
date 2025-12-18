@@ -11,12 +11,19 @@ class Linear_QNet(nn.Module):
         # Lớp tuyến tính 2: Từ 256 node ẩn xuống 4 đầu ra (hành động)
         self.linear2 = nn.Linear(hidden_size, output_size)
 
-    def load(self):
-        full_path = '/content/drive/MyDrive/SnakeAI/models/best_model' 
+    def load(self, file_name='best_model.pth'):
+        # 1. Sử dụng os.path.join và đúng tên tệp có đuôi .pth
+        model_folder_path = '/content/drive/MyDrive/SnakeAI/models'
+        full_path = os.path.join(model_folder_path, file_name)
+        
         if os.path.exists(full_path):
-            self.load_state_dict(torch.load(full_path))
+            # 2. Thêm map_location để tương thích CPU/GPU
+            self.load_state_dict(torch.load(full_path, map_location=torch.device('cpu')))
             self.eval() 
+            print(f"--> Đã nạp thành công: {full_path}")
             return True
+            
+        print(f"--> Cảnh báo: Không tìm thấy file tại {full_path}")
         return False
     
     def forward(self, x):
