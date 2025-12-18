@@ -27,7 +27,7 @@ class Linear_QNet(nn.Module):
         return x
 
     def save(self, episode=None, file_name='model.pth'):
-        model_folder_path = './models' 
+        model_folder_path = '/content/drive/MyDrive/SnakeAI/models' 
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
 
