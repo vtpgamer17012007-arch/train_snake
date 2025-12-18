@@ -8,7 +8,7 @@ import json
 
 # Import các thành phần từ dự án của bạn
 from snake.core.env_snake import SnakeEnv
-from snake.core.snake_render import SnakeRenderer
+
 from snake.rl.agent_dqn import DQNAgent
 from snake.rl.train_graph import plot
 from snake import settings as s
