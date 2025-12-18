@@ -135,7 +135,7 @@ def save_stats(n_games, record):
     }
     with open(STAT_PATH, "w") as f: # Dùng STAT_PATH
         json.dump(stats, f)
-    print(f"--> Đã lưu tiến trình vào Drive: {stats}")
+   
 
 def load_stats():
     """Tải số trận và kỷ lục từ file JSON trên Drive nếu tồn tại."""
