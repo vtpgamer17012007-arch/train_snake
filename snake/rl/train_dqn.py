@@ -40,7 +40,7 @@ def train():
     
     # 3. Nạp lại trọng số mạng nơ-ron (Tri thức)
     # Cần đảm bảo bạn đã thêm hàm load() vào class Linear_QNet
-    agent.model.load('model_ep2800.pth')
+    agent.model.load('best_model.pth')
     
     # Biến điều khiển hiển thị (Bật để xem AI chơi, tắt để train siêu tốc)
     VISUALIZE = False
