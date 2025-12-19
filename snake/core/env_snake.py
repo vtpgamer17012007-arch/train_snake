@@ -46,7 +46,9 @@ class SnakeEnv:
     def step(self, action_direction):
         if self.game_over:
             return self.get_state(), 0, True, {}
-
+        # Lấy khoảng cách cũ trước khi di chuyển
+        old_dist = abs(self.snake_pos[0][0] - self.food_pos[0]) + \
+               abs(self.snake_pos[0][1] - self.food_pos[1])
         self.direction = action_direction
         head_x, head_y = self.snake_pos[0]
         dir_x, dir_y = self.direction
@@ -190,6 +192,7 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
 
 
 
