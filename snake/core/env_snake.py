@@ -1,4 +1,4 @@
-import random
+ import random
 import pygame
 import numpy as np
 from snake import settings as s
@@ -57,7 +57,7 @@ class SnakeEnv:
             new_head[0] < s.START_COL or new_head[0] >= s.END_COL or
             new_head[1] < s.START_ROW or new_head[1] >= s.END_ROW):
             self.game_over = True
-            return self.get_state(), -10, True, {}
+            return self.get_state(), -100, True, {}
 
         # Lưu lại chiều dài HIỆN TẠI trước khi thêm đầu mới
         current_length = len(self.snake_pos)
@@ -67,7 +67,7 @@ class SnakeEnv:
         # 2. Logic ăn mồi (Giữ nguyên: không pop để dài ra)
         if new_head == self.food_pos:
             self.score += 1
-            reward = 10
+            reward = 20
             self._spawn_food()
 
         # 3. Logic dẫm phải "poop" (Thay đổi tại đây)
@@ -75,7 +75,7 @@ class SnakeEnv:
             if current_length == 1:
                 # TRƯỜNG HỢP 1: Chỉ có duy nhất cái đầu -> CHẾT
                 self.game_over = True
-                reward = -10
+                reward = -70
             else:
                 # TRƯỜNG HỢP 2: Có thân -> RÚT NGẮN THÂN
                 # Xóa poop đã ăn
@@ -92,14 +92,22 @@ class SnakeEnv:
                     self.snake_pos.pop()
                 
                 self.score = max(0, self.score - 1)
-                reward = -5 # Phạt vừa phải để AI biết đường né
+                reward = -7 # Phạt vừa phải để AI biết đường né
                 self._spawn_poop()
-        elif current_length >=  50: 
-            reward = -2
+        
         # 4. Di chuyển bình thường
         else:
-            self.snake_pos.pop() # Xóa đuôi để duy trì chiều dài
-            reward = -1
+            self.snake_pos.pop()
+            new_dist = abs(new_head[0] - self.food_pos[0]) + \
+                   abs(new_head[1] - self.food_pos[1])
+        
+            if new_dist < old_dist:
+                reward = 0.3  # Thưởng vì tiến lại gần mồi (giúp đi thẳng)
+            else:
+                if current_length >=  50: 
+                    reward = -1 # Phạt vì đi xa mồi hoặc đi zizac thừa
+                else: 
+                    reward = -0.5 # Phạt vì đi xa mồi hoặc đi zizac thừa
 
         return self.get_state(), reward, self.game_over, {}
     
@@ -182,6 +190,7 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
 
 
 
