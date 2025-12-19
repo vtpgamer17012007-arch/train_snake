@@ -94,7 +94,7 @@ class SnakeEnv:
                     self.snake_pos.pop()
                 
                 self.score = max(0, self.score - 1)
-                reward = -7 # Phạt vừa phải để AI biết đường né
+                reward = -10 # Phạt vừa phải để AI biết đường né
                 self._spawn_poop()
         
         # 4. Di chuyển bình thường
@@ -189,6 +189,7 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
 
 
 
