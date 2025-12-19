@@ -1,4 +1,4 @@
- import random
+import random
 import pygame
 import numpy as np
 from snake import settings as s
@@ -190,6 +190,7 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
 
 
 
