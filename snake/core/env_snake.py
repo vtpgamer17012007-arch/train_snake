@@ -59,7 +59,7 @@ class SnakeEnv:
             new_head[0] < s.START_COL or new_head[0] >= s.END_COL or
             new_head[1] < s.START_ROW or new_head[1] >= s.END_ROW):
             self.game_over = True
-            return self.get_state(), -100, True, {}
+            return self.get_state(), -150, True, {}
 
         # Lưu lại chiều dài HIỆN TẠI trước khi thêm đầu mới
         current_length = len(self.snake_pos)
@@ -77,7 +77,7 @@ class SnakeEnv:
             if current_length == 1:
                 # TRƯỜNG HỢP 1: Chỉ có duy nhất cái đầu -> CHẾT
                 self.game_over = True
-                reward = -70
+                reward = -100
             else:
                 # TRƯỜNG HỢP 2: Có thân -> RÚT NGẮN THÂN
                 # Xóa poop đã ăn
@@ -106,10 +106,7 @@ class SnakeEnv:
             if new_dist < old_dist:
                 reward = 0.3  # Thưởng vì tiến lại gần mồi (giúp đi thẳng)
             else:
-                if current_length >=  50: 
-                    reward = -1 # Phạt vì đi xa mồi hoặc đi zizac thừa
-                else: 
-                    reward = -0.5 # Phạt vì đi xa mồi hoặc đi zizac thừa
+                reward = -0.3 # Phạt vì đi xa mồi hoặc đi zizac thừa
 
         return self.get_state(), reward, self.game_over, {}
     
@@ -192,6 +189,7 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
 
 
 
