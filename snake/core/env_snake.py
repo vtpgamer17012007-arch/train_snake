@@ -98,7 +98,7 @@ class SnakeEnv:
         # 4. Di chuyển bình thường
         else:
             self.snake_pos.pop() # Xóa đuôi để duy trì chiều dài
-            reward = -0.1
+            reward = -1
 
         return self.get_state(), reward, self.game_over, {}
     
@@ -181,3 +181,4 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
