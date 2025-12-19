@@ -94,7 +94,7 @@ class SnakeEnv:
                 self.score = max(0, self.score - 1)
                 reward = -5 # Phạt vừa phải để AI biết đường né
                 self._spawn_poop()
-        elif current_length >= 50
+        elif current_length >=  50: 
             reward = -2
         # 4. Di chuyển bình thường
         else:
@@ -182,5 +182,6 @@ class SnakeEnv:
         self.poops = state_dict.get("poops", [])
         self.score = state_dict["score"]
         self.game_over = False
+
 
 
