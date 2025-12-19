@@ -17,7 +17,7 @@ class DQNAgent:
 
     def get_action(self, state):
         # Chiến thuật Epsilon-Greedy: Răng càng chơi nhiều càng bớt đi lung tung
-        self.epsilon = 0 #max(10, 700 - self.n_games)
+        self.epsilon = -1 #max(10, 700 - self.n_games)
         final_move = 0
         if random.randint(0, 1000) < self.epsilon:
             final_move = random.randint(0, 3)
